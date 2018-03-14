@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 
 luarocks make
 luarocks pack kong-lib-logger
