@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  lua:
+    build: .
+    environment:
+      - LUA_PATH=/test/src/?.lua;/test/src/?/init.lua;/test/spec/?.lua;
+    volumes:
+      - .:/test
+
