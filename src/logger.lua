@@ -1,10 +1,13 @@
 local Object = require("classic")
-local cjson = require "cjson"
+local cjson = require("cjson")
 
 local Logger = Object:extend()
 
 local function merge(extendee, extender)
-    for key, value in pairs(extender) do extendee[key] = value end
+    for key, value in pairs(extender) do
+        extendee[key] = value
+    end
+    
     return extendee
 end
 
@@ -13,12 +16,10 @@ function Logger:new()
         error('Nginx is required to construct a logger')
     end
 
-    self.__index = self
     self._transactionId = Logger.ngx.var.request_id
     self._logCounter = 1
     self._context = {}
 end
-
 
 function Logger.getInstance(nginx)
     if nginx == nil then
@@ -34,33 +35,21 @@ function Logger.getInstance(nginx)
     return Logger.ngx.ctx.logger
 end
 
-
 function Logger:addContext(context)
     self._context = merge(self._context, context)
 end
 
-
-function Logger:logNotice(data)
-    self:_log(data, 'notice', Logger.ngx.NOTICE)
+local function getCallerFilePath()
+    local debugInfo = debug.getinfo(4, "Sl")
+    return debugInfo.source .. ':' .. debugInfo.currentline
 end
-
-
-function Logger:logWarning(data)
-    self:_log(data, 'warning', Logger.ngx.WARN)
-end
-
-
-function Logger:logError(data)
-    self:_log({error = data}, 'error', Logger.ngx.ERR)
-end
-
 
 function Logger:_log(data, severityName, severityCode)
     local additionalData = {
         severity = severityName,
         transaction_id = self._transactionId,
         log_counter = self._logCounter,
-        caller_file_path = self:_getCallerFilePath(),
+        caller_file_path = getCallerFilePath(),
         context = self._context
     }
     local logData = merge(additionalData, data)
@@ -70,11 +59,16 @@ function Logger:_log(data, severityName, severityCode)
     self._logCounter = self._logCounter + 1
 end
 
-
-function Logger:_getCallerFilePath()
-    local debugInfo = debug.getinfo(4, "Sl")
-    return debugInfo.source .. ':' .. debugInfo.currentline
+function Logger:logNotice(data)
+    self:_log(data, 'notice', Logger.ngx.NOTICE)
 end
 
+function Logger:logWarning(data)
+    self:_log(data, 'warning', Logger.ngx.WARN)
+end
+
+function Logger:logError(data)
+    self:_log({error = data}, 'error', Logger.ngx.ERR)
+end
 
 return Logger
