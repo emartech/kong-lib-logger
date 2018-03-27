@@ -71,4 +71,8 @@ function Logger:logError(data)
     self:_log({error = data}, 'error', Logger.ngx.ERR)
 end
 
+function Logger:logInfo(data)
+    self:_log(data, 'info', Logger.ngx.INFO)
+end
+
 return Logger
