@@ -8,7 +8,7 @@ source = {
 description = {
   summary = "A simple logger library for kong",
   homepage = "https://github.com/emartech/kong-lib-logger",
-  license = "UNLICENSED"
+  license = "MIT"
 }
 dependencies = {
   "classic >= 0.1.0-1",
