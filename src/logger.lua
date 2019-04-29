@@ -68,7 +68,13 @@ function Logger:logWarning(data)
 end
 
 function Logger:logError(data)
-    self:_log({error = data}, 'error', Logger.ngx.ERR)
+    local error = data
+
+    if type(data) ~= 'table' then
+        error = { msg = data }
+    end
+
+    self:_log({ error = error }, 'error', Logger.ngx.ERR)
 end
 
 function Logger:logInfo(data)

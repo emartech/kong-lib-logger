@@ -61,6 +61,14 @@ describe('Logger', function()
             assert.are.same({ foo = 'bar' }, data)
         end)
 
+        it('should wrap error into an object when error is not an object', function()
+            Logger.getInstance(ngx):logError('My fatal error')
+
+            local log = ngx.getLoggedMessages()[1]
+
+            assert.are.same('My fatal error', log.data.error.msg)
+        end)
+
     end)
 
     describe('.getInstance', function()
