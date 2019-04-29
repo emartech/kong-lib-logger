@@ -1,7 +1,9 @@
 FROM emarsys/lua:latest
 
-RUN apt-get update
-RUN apt-get install -y curl git
+RUN yum update -y
+RUN yum install -y \
+    curl \
+    git
 
 RUN luarocks install busted
 RUN luarocks install classic
