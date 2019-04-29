@@ -1,9 +1,9 @@
 package = "kong-lib-logger"
-version = "0.3.0-1"
+version = "0.4.0-1"
 supported_platforms = {"linux", "macosx"}
 source = {
   url = "git+https://github.com/emartech/kong-lib-logger.git",
-  tag = "0.3.0"
+  tag = "0.4.0"
 }
 description = {
   summary = "A simple logger library for kong",
